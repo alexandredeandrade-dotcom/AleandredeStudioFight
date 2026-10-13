@@ -29,7 +29,6 @@
             padding-bottom: 100px;
         }
 
-        /* --- HEADER --- */
         .header {
             padding: 40px 20px 30px;
             background: linear-gradient(180deg, #1a1f2e 0%, var(--bg) 100%);
@@ -43,12 +42,10 @@
         }
         .header p { margin: 5px 0 0; color: var(--text-muted); font-size: 14px; }
 
-        /* --- SISTEMA DE TELAS --- */
         .page { display: none; padding: 20px; animation: slideUp 0.4s ease; }
         .page.active { display: block; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- CARDS --- */
         .dashboard-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 30px; }
         .stat-card {
             background: var(--surface); border: 1px solid var(--border);
@@ -59,7 +56,6 @@
         .stat-card .value { font-size: 24px; font-weight: 800; display: block; color: #fff; }
         .stat-card .label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
 
-        /* --- AGENDA --- */
         .agenda-controls { display: flex; gap: 10px; margin-bottom: 20px; align-items: center; }
         .agenda-controls input {
             flex: 1; background: var(--surface); border: 1px solid var(--border);
@@ -82,7 +78,6 @@
         .btn-presence.p { background: var(--success); border-color: var(--success); color: #fff; }
         .btn-presence.f { background: var(--danger); border-color: var(--danger); color: #fff; }
 
-        /* --- ALUNOS --- */
         .search-box { display: flex; gap: 10px; margin-bottom: 20px; }
         .search-box input {
             flex: 1; background: var(--surface); border: 1px solid var(--border);
@@ -101,7 +96,6 @@
         .student-details b { display: block; font-size: 16px; color: #fff; }
         .student-details span { font-size: 13px; color: var(--text-muted); }
 
-        /* --- MODALS --- */
         .modal {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center;
@@ -119,7 +113,6 @@
             border-radius: 12px; color: #fff; font-size: 15px;
         }
 
-        /* --- NAV --- */
         nav {
             position: fixed; bottom: 0; left: 0; right: 0; background: rgba(17, 20, 27, 0.95);
             border-top: 1px solid var(--border); display: flex; justify-content: space-around;
@@ -133,7 +126,6 @@
         }
         .nav-item i { font-size: 22px; margin-bottom: 6px; }
         .nav-item.active { color: var(--accent); }
-        
         .section-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; color: #fff; }
         button.pr { background: var(--accent); border: none; color: #fff; font-weight: 700; padding: 15px; border-radius: 15px; cursor: pointer; }
     </style>
@@ -145,7 +137,6 @@
         <p id="page-subtitle">Gestão de Alta Performance</p>
     </div>
 
-    <!-- TELA: HOME -->
     <div id="home" class="page active">
         <div class="section-title"><i class="fa-solid fa-chart-line" style="color:var(--accent)"></i> Visão Geral</div>
         <div class="dashboard-grid">
@@ -165,7 +156,6 @@
         </div>
     </div>
 
-    <!-- TELA: ALUNOS -->
     <div id="students" class="page">
         <div class="section-title"><i class="fa-solid fa-users" style="color:var(--accent)"></i> Alunos</div>
         <div class="search-box">
@@ -175,7 +165,6 @@
         <div id="studentsList"></div>
     </div>
 
-    <!-- TELA: AGENDA -->
     <div id="agenda" class="page">
         <div class="section-title"><i class="fa-solid fa-calendar-days" style="color:var(--accent)"></i> Agenda</div>
         <div class="agenda-controls">
@@ -187,7 +176,6 @@
 
     <div id="finance" class="page"><div class="section-title">Financeiro</div><div style="text-align:center; color:var(--text-muted); padding:40px">Módulo em construção...</div></div>
 
-    <!-- MODAL ALUNO -->
     <div id="studentModal" class="modal">
         <div class="modal-content">
             <h2 style="margin-top:0; font-weight:800">Novo Aluno</h2>
@@ -203,13 +191,10 @@
         </div>
     </div>
 
-    <!-- MODAL AGENDA -->
     <div id="agendaModal" class="modal">
         <div class="modal-content">
             <h2 style="margin-top:0; font-weight:800">Agendar Aula</h2>
-            <div class="form-group"><label>Aluno</label>
-                <select id="classStudent"></select>
-            </div>
+            <div class="form-group"><label>Aluno</label><select id="classStudent"></select></div>
             <div class="form-group"><label>Data</label><input type="date" id="classDate"></div>
             <div class="form-group"><label>Horário</label><input type="time" id="classTime"></div>
             <div style="display:flex; gap:10px; margin-top:25px">
@@ -227,13 +212,27 @@
     </nav>
 
     <script>
-        let db_students = JSON.parse(localStorage.getItem('studio_students')) || [];
-        let db_agenda = JSON.parse(localStorage.getItem('studio_agenda')) || [];
+        // Banco de Dados Local com verificação de segurança
+        let db_students = [];
+        let db_agenda = [];
+
+        function loadData() {
+            try {
+                db_students = JSON.parse(localStorage.getItem('studio_students')) || [];
+                db_agenda = JSON.parse(localStorage.getItem('studio_agenda')) || [];
+            } catch(e) {
+                console.error("Erro ao carregar dados:", e);
+            }
+        }
 
         function saveAll() {
-            localStorage.setItem('studio_students', JSON.stringify(db_students));
-            localStorage.setItem('studio_agenda', JSON.stringify(db_agenda));
-            updateDashboard();
+            try {
+                localStorage.setItem('studio_students', JSON.stringify(db_students));
+                localStorage.setItem('studio_agenda', JSON.stringify(db_agenda));
+                updateDashboard();
+            } catch(e) {
+                alert("Erro ao salvar dados. Verifique se o armazenamento do celular está cheio.");
+            }
         }
 
         function switchPage(pageId, element) {
@@ -250,22 +249,37 @@
             if(pageId === 'agenda') renderAgenda();
         }
 
-        // LÓGICA ALUNOS
         function openModal(id) { document.getElementById(id).classList.add('active'); if(id==='agendaModal') fillStudentSelect(); }
         function closeModal() { document.querySelectorAll('.modal').forEach(m => m.classList.remove('active')); }
 
         function saveStudent() {
-            const name = document.getElementById('stuName').value;
-            const phone = document.getElementById('stuPhone').value;
+            const name = document.getElementById('stuName').value.trim();
+            const phone = document.getElementById('stuPhone').value.trim();
             const plan = document.getElementById('stuPlan').value;
-            if(!name) return alert("Digite o nome");
-            db_students.push({ id: Date.now(), name, phone, plan });
-            saveAll(); closeModal(); renderStudents();
-            document.getElementById('stuName').value = ''; document.getElementById('stuPhone').value = '';
+
+            if(!name) {
+                alert("Por favor, digite o nome do aluno");
+                return;
+            }
+
+            const newStudent = { id: Date.now(), name, phone, plan };
+            db_students.push(newStudent);
+            saveAll();
+            closeModal();
+            renderStudents();
+            
+            // Limpar campos
+            document.getElementById('stuName').value = '';
+            document.getElementById('stuPhone').value = '';
+            alert("Aluno cadastrado com sucesso!");
         }
 
         function deleteStudent(id) {
-            if(confirm("Remover aluno?")) { db_students = db_students.filter(s => s.id !== id); saveAll(); renderStudents(); }
+            if(confirm("Tem certeza que deseja remover este aluno?")) {
+                db_students = db_students.filter(s => s.id !== id);
+                saveAll();
+                renderStudents();
+            }
         }
 
         function renderStudents() {
@@ -273,15 +287,28 @@
             const listElement = document.getElementById('studentsList');
             listElement.innerHTML = '';
             const filtered = db_students.filter(s => s.name.toLowerCase().includes(search));
-            if(filtered.length === 0) { listElement.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:40px">Nenhum aluno encontrado</div>`; return; }
+            if(filtered.length === 0) {
+                listElement.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:40px">Nenhum aluno encontrado</div>`;
+                return;
+            }
             filtered.forEach(s => {
-                listElement.innerHTML += `<div class="student-card"><div class="student-info"><div class="student-avatar">${s.name.charAt(0).toUpperCase()}</div><div class="student-details"><b>${s.name}</b><span>${s.plan} • ${s.phone || 'Sem tel'}</span></div></div><button style="background:none; border:none; color:var(--danger); cursor:pointer" onclick="deleteStudent(${s.id})"><i class="fa-solid fa-trash"></i></button></div>`;
+                listElement.innerHTML += `
+                <div class="student-card">
+                    <div class="student-info">
+                        <div class="student-avatar">${s.name.charAt(0).toUpperCase()}</div>
+                        <div class="student-details"><b>${s.name}</b><span>${s.plan} • ${s.phone || 'Sem tel'}</span></div>
+                    </div>
+                    <button style="background:none; border:none; color:var(--danger); cursor:pointer" onclick="deleteStudent(${s.id})"><i class="fa-solid fa-trash"></i></button>
+                </div>`;
             });
         }
 
-        // LÓGICA AGENDA
         function fillStudentSelect() {
             const select = document.getElementById('classStudent');
+            if(db_students.length === 0) {
+                select.innerHTML = `<option value="">Cadastre um aluno primeiro</option>`;
+                return;
+            }
             select.innerHTML = db_students.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
         }
 
@@ -303,19 +330,14 @@
             const date = document.getElementById('agendaDate').value;
             const listElement = document.getElementById('agendaList');
             listElement.innerHTML = '';
-            if(!date) { listElement.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:40px">Selecione uma data para ver as aulas</div>`; return; }
-            
+            if(!date) { listElement.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:40px">Selecione uma data</div>`; return; }
             const filtered = db_agenda.filter(c => c.date === date).sort((a,b) => a.time.localeCompare(b.time));
-            if(filtered.length === 0) { listElement.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:40px">Nenhuma aula agendada para este dia</div>`; return; }
-            
+            if(filtered.length === 0) { listElement.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:40px">Nenhuma aula para este dia</div>`; return; }
             filtered.forEach(c => {
                 const stu = db_students.find(s => s.id == c.sid);
                 listElement.innerHTML += `
                 <div class="class-card">
-                    <div class="class-top">
-                        <span class="class-time">${c.time}</span>
-                        <span class="class-student">${stu ? stu.name : 'Aluno removido'}</span>
-                    </div>
+                    <div class="class-top"><span class="class-time">${c.time}</span><span class="class-student">${stu ? stu.name : 'Aluno removido'}</span></div>
                     <div class="class-actions">
                         <button class="btn-presence ${c.status=='p'?'p':''}" onclick="togglePresence(${c.id}, 'p')">Presente</button>
                         <button class="btn-presence ${c.status=='f'?'f':''}" onclick="togglePresence(${c.id}, 'f')">Faltou</button>
@@ -337,10 +359,10 @@
         }
 
         window.onload = () => { 
+            loadData();
             document.getElementById('agendaDate').value = new Date().toISOString().split('T')[0];
             updateDashboard(); 
         };
     </script>
 </body>
 </html>
-
