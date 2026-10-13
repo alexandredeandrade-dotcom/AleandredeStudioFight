@@ -3,20 +3,22 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Studio Pro</title>
+    <title>Studio Management Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --bg: #0a0a0a;            /* Preto Absoluto - Mais elegante */
-            --surface: #121212;       /* Grafite Escuro */
-            --surface-light: #1c1c1c;  /* Grafite Médio */
-            --accent: #d97706;        /* Laranja Âmbar (Mais sofisticado, menos "estourado") */
-            --accent-soft: rgba(217, 119, 6, 0.1);
+            --bg: #05070a;            
+            --surface: #11141b;       
+            --surface-light: #1c212d;  
+            --accent: #d97706;        
+            --accent-soft: rgba(217, 119, 6, 0.15);
             --text-main: #ffffff;
-            --text-muted: #888888;
-            --border: #222222;         /* Borda quase invisível */
+            --text-muted: #64748b;
+            --border: #2d3446;         
+            --success: #22c55e;
+            --danger: #ef4444;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -27,7 +29,7 @@
             padding-bottom: 100px;
         }
 
-        /* --- HEADER PROFISSIONAL --- */
+        /* --- HEADER --- */
         .header {
             padding: 40px 20px 30px;
             background: linear-gradient(180deg, #1a1f2e 0%, var(--bg) 100%);
@@ -39,66 +41,48 @@
             background: linear-gradient(90deg, #fff, var(--accent)); 
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        .header p { margin: 5px 0 0; color: var(--text-muted); font-size: 14px; font-weight: 400; }
+        .header p { margin: 5px 0 0; color: var(--text-muted); font-size: 14px; }
 
         /* --- SISTEMA DE TELAS --- */
         .page { display: none; padding: 20px; animation: slideUp 0.4s ease; }
         .page.active { display: block; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- CARDS PREMIUM --- */
+        /* --- CARDS --- */
         .dashboard-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 30px; }
         .stat-card {
-            background: var(--surface);
-            border: none; /* Tiramos a borda */
-            padding: 20px;
-            border-radius: 24px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6); /* Sombra bem mais profunda */
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
+            background: var(--surface); border: 1px solid var(--border);
+            padding: 20px; border-radius: 24px; box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            transition: var(--transition); position: relative; overflow: hidden;
         }
-
-        }
-        .stat-card:active { transform: scale(0.96); background: var(--surface-light); }
-        
-        /* Efeito de luz no canto do card */
-        .stat-card::after {
-            content: ''; position: absolute; top: -50%; left: -50%; width: 100%; height: 100%;
-            background: radial-gradient(circle, rgba(249,115,22,0.05) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .stat-card i { 
-            font-size: 22px; color: var(--accent); margin-bottom: 15px; 
-            display: block; filter: drop-shadow(0 0 5px var(--accent));
-        }
+        .stat-card i { font-size: 22px; color: var(--accent); margin-bottom: 15px; display: block; }
         .stat-card .value { font-size: 24px; font-weight: 800; display: block; color: #fff; }
-        .stat-card .label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
+        .stat-card .label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
 
-        /* --- ATALHOS --- */
-        .shortcut-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            padding: 20px;
-            border-radius: 24px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 12px;
-            cursor: pointer;
-            transition: var(--transition);
+        /* --- AGENDA --- */
+        .agenda-controls { display: flex; gap: 10px; margin-bottom: 20px; align-items: center; }
+        .agenda-controls input {
+            flex: 1; background: var(--surface); border: 1px solid var(--border);
+            padding: 12px; border-radius: 12px; color: #fff; font-size: 14px;
+        }
+        .class-card {
+            background: var(--surface); border: 1px solid var(--border);
+            padding: 15px; border-radius: 20px; margin-bottom: 12px;
+            display: flex; flex-direction: column; gap: 12px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
-        .shortcut-card:active { transform: translateX(5px); background: var(--surface-light); }
-        .shortcut-icon { 
-            width: 45px; height: 45px; background: var(--accent-soft); 
-            color: var(--accent); border-radius: 14px; 
-            display: grid; place-items: center; font-size: 20px;
+        .class-top { display: flex; justify-content: space-between; align-items: center; }
+        .class-time { font-weight: 800; color: var(--accent); font-size: 18px; }
+        .class-student { font-weight: 600; font-size: 16px; }
+        .class-actions { display: flex; gap: 10px; }
+        .btn-presence {
+            flex: 1; padding: 10px; border-radius: 12px; border: 1px solid var(--border);
+            font-weight: 700; font-size: 12px; cursor: pointer; background: var(--bg); color: #fff;
         }
-        .shortcut-text { font-weight: 600; font-size: 15px; }
+        .btn-presence.p { background: var(--success); border-color: var(--success); color: #fff; }
+        .btn-presence.f { background: var(--danger); border-color: var(--danger); color: #fff; }
 
-        /* --- LISTA DE ALUNOS --- */
+        /* --- ALUNOS --- */
         .search-box { display: flex; gap: 10px; margin-bottom: 20px; }
         .search-box input {
             flex: 1; background: var(--surface); border: 1px solid var(--border);
@@ -108,7 +92,6 @@
             background: var(--surface); border: 1px solid var(--border);
             padding: 15px; border-radius: 20px; margin-bottom: 12px;
             display: flex; align-items: center; justify-content: space-between;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
         .student-info { display: flex; align-items: center; gap: 15px; }
         .student-avatar { 
@@ -118,7 +101,7 @@
         .student-details b { display: block; font-size: 16px; color: #fff; }
         .student-details span { font-size: 13px; color: var(--text-muted); }
 
-        /* --- MODAL --- */
+        /* --- MODALS --- */
         .modal {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center;
@@ -128,18 +111,17 @@
         .modal-content {
             background: var(--surface); width: 100%; max-width: 400px;
             padding: 30px; border-radius: 30px; border: 1px solid var(--border);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
         }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 8px; font-weight: 600; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 8px; }
         .form-group input, .form-group select {
-            width: 100%; padding: 14px; background: var(--bg); border: 1px solid var(--border);
+            width: 100%; padding: 12px; background: var(--bg); border: 1px solid var(--border);
             border-radius: 12px; color: #fff; font-size: 15px;
         }
 
         /* --- NAV --- */
         nav {
-            position: fixed; bottom: 0; left: 0; right: 0; background: rgba(17, 24, 31, 0.95);
+            position: fixed; bottom: 0; left: 0; right: 0; background: rgba(17, 20, 27, 0.95);
             border-top: 1px solid var(--border); display: flex; justify-content: space-around;
             padding: 15px 0 calc(env(safe-area-inset-bottom, 15px));
             backdrop-filter: blur(10px); z-index: 1000;
@@ -149,10 +131,9 @@
             color: var(--text-muted); text-decoration: none; font-size: 11px; font-weight: 600;
             border: none; background: none; cursor: pointer; width: 25%; transition: var(--transition);
         }
-        .nav-item i { font-size: 22px; margin-bottom: 6px; transition: var(--transition); }
+        .nav-item i { font-size: 22px; margin-bottom: 6px; }
         .nav-item.active { color: var(--accent); }
-        .nav-item.active i { transform: translateY(-5px); color: var(--accent); }
-
+        
         .section-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; color: #fff; }
         button.pr { background: var(--accent); border: none; color: #fff; font-weight: 700; padding: 15px; border-radius: 15px; cursor: pointer; }
     </style>
@@ -164,6 +145,7 @@
         <p id="page-subtitle">Gestão de Alta Performance</p>
     </div>
 
+    <!-- TELA: HOME -->
     <div id="home" class="page active">
         <div class="section-title"><i class="fa-solid fa-chart-line" style="color:var(--accent)"></i> Visão Geral</div>
         <div class="dashboard-grid">
@@ -172,53 +154,67 @@
             <div class="stat-card"><i class="fa-solid fa-wallet"></i><span class="value" id="dash-financeiro">R$ 0</span><span class="label">Recebido Mês</span></div>
             <div class="stat-card"><i class="fa-solid fa-circle-exclamation"></i><span class="value" id="dash-pendente">0</span><span class="label">Pendências</span></div>
         </div>
-        
         <div class="section-title"><i class="fa-solid fa-bolt" style="color:var(--accent)"></i> Atalhos Rápidos</div>
-        <div class="shortcut-card" onclick="switchPage('students')">
-            <div class="shortcut-icon"><i class="fa-solid fa-user-plus"></i></div>
-            <div class="shortcut-text">Cadastrar Novo Aluno</div>
-        </div>
-        <div class="shortcut-card" onclick="switchPage('agenda')">
-            <div class="shortcut-icon"><i class="fa-solid fa-calendar-plus"></i></div>
-            <div class="shortcut-text">Agendar Nova Aula</div>
+        <div class="dashboard-grid">
+            <button class="stat-card" style="border-color: var(--accent); cursor:pointer" onclick="switchPage('students')">
+                <i class="fa-solid fa-user-plus"></i><span class="label">Novo Aluno</span>
+            </button>
+            <button class="stat-card" style="border-color: var(--accent); cursor:pointer" onclick="switchPage('agenda')">
+                <i class="fa-solid fa-calendar-plus"></i><span class="label">Nova Aula</span>
+            </button>
         </div>
     </div>
 
+    <!-- TELA: ALUNOS -->
     <div id="students" class="page">
         <div class="section-title"><i class="fa-solid fa-users" style="color:var(--accent)"></i> Alunos</div>
         <div class="search-box">
             <input type="text" id="studentSearch" placeholder="Buscar aluno..." oninput="renderStudents()">
-            <button class="pr" style="padding: 0 20px; border-radius: 15px;" onclick="openModal()"><i class="fa-solid fa-plus"></i></button>
+            <button class="pr" style="padding: 0 20px; border-radius: 15px;" onclick="openModal('studentModal')"><i class="fa-solid fa-plus"></i></button>
         </div>
         <div id="studentsList"></div>
     </div>
 
-    <div id="agenda" class="page"><div class="section-title">Agenda</div><div class="placeholder-card">Em construção...</div></div>
-    <div id="finance" class="page"><div class="section-title">Financeiro</div><div class="placeholder-card">Em construção...</div></div>
+    <!-- TELA: AGENDA -->
+    <div id="agenda" class="page">
+        <div class="section-title"><i class="fa-solid fa-calendar-days" style="color:var(--accent)"></i> Agenda</div>
+        <div class="agenda-controls">
+            <input type="date" id="agendaDate" onchange="renderAgenda()">
+            <button class="pr" style="border-radius:12px; padding: 0 15px;" onclick="openModal('agendaModal')"><i class="fa-solid fa-plus"></i></button>
+        </div>
+        <div id="agendaList"></div>
+    </div>
 
+    <div id="finance" class="page"><div class="section-title">Financeiro</div><div style="text-align:center; color:var(--text-muted); padding:40px">Módulo em construção...</div></div>
+
+    <!-- MODAL ALUNO -->
     <div id="studentModal" class="modal">
         <div class="modal-content">
             <h2 style="margin-top:0; font-weight:800">Novo Aluno</h2>
-            <div class="form-group">
-                <label>Nome Completo</label>
-                <input type="text" id="stuName" placeholder="Ex: João Silva">
-            </div>
-            <div class="form-group">
-                <label>WhatsApp</label>
-                <input type="tel" id="stuPhone" placeholder="(00) 00000-0000">
-            </div>
-            <div class="form-group">
-                <label>Plano</label>
-                <select id="stuPlan">
-                    <option value="Mensal">Mensal</option>
-                    <option value="Trimestral">Trimestral</option>
-                    <option value="Semestral">Semestral</option>
-                    <option value="Avulso">Avulso</option>
-                </select>
+            <div class="form-group"><label>Nome Completo</label><input type="text" id="stuName"></div>
+            <div class="form-group"><label>WhatsApp</label><input type="tel" id="stuPhone"></div>
+            <div class="form-group"><label>Plano</label>
+                <select id="stuPlan"><option value="Mensal">Mensal</option><option value="Trimestral">Trimestral</option><option value="Avulso">Avulso</option></select>
             </div>
             <div style="display:flex; gap:10px; margin-top:25px">
                 <button style="flex:1; padding:15px; border-radius:15px; background:transparent; color:#fff; border:1px solid var(--border); cursor:pointer" onclick="closeModal()">Cancelar</button>
-                <button class="pr" style="flex:2; padding:15px; border-radius:15px; cursor:pointer" onclick="saveStudent()">Confirmar Cadastro</button>
+                <button class="pr" style="flex:2; padding:15px; border-radius:15px; cursor:pointer" onclick="saveStudent()">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL AGENDA -->
+    <div id="agendaModal" class="modal">
+        <div class="modal-content">
+            <h2 style="margin-top:0; font-weight:800">Agendar Aula</h2>
+            <div class="form-group"><label>Aluno</label>
+                <select id="classStudent"></select>
+            </div>
+            <div class="form-group"><label>Data</label><input type="date" id="classDate"></div>
+            <div class="form-group"><label>Horário</label><input type="time" id="classTime"></div>
+            <div style="display:flex; gap:10px; margin-top:25px">
+                <button style="flex:1; padding:15px; border-radius:15px; background:transparent; color:#fff; border:1px solid var(--border); cursor:pointer" onclick="closeModal()">Cancelar</button>
+                <button class="pr" style="flex:2; padding:15px; border-radius:15px; cursor:pointer" onclick="saveClass()">Agendar</button>
             </div>
         </div>
     </div>
@@ -232,7 +228,13 @@
 
     <script>
         let db_students = JSON.parse(localStorage.getItem('studio_students')) || [];
-        function saveToDB() { localStorage.setItem('studio_students', JSON.stringify(db_students)); updateDashboard(); }
+        let db_agenda = JSON.parse(localStorage.getItem('studio_agenda')) || [];
+
+        function saveAll() {
+            localStorage.setItem('studio_students', JSON.stringify(db_students));
+            localStorage.setItem('studio_agenda', JSON.stringify(db_agenda));
+            updateDashboard();
+        }
 
         function switchPage(pageId, element) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -245,10 +247,12 @@
             document.getElementById('page-title').innerText = titles[pageId][0];
             document.getElementById('page-subtitle').innerText = titles[pageId][1];
             if(pageId === 'students') renderStudents();
+            if(pageId === 'agenda') renderAgenda();
         }
 
-        function openModal() { document.getElementById('studentModal').classList.add('active'); }
-        function closeModal() { document.getElementById('studentModal').classList.remove('active'); }
+        // LÓGICA ALUNOS
+        function openModal(id) { document.getElementById(id).classList.add('active'); if(id==='agendaModal') fillStudentSelect(); }
+        function closeModal() { document.querySelectorAll('.modal').forEach(m => m.classList.remove('active')); }
 
         function saveStudent() {
             const name = document.getElementById('stuName').value;
@@ -256,12 +260,12 @@
             const plan = document.getElementById('stuPlan').value;
             if(!name) return alert("Digite o nome");
             db_students.push({ id: Date.now(), name, phone, plan });
-            saveToDB(); closeModal(); renderStudents();
+            saveAll(); closeModal(); renderStudents();
             document.getElementById('stuName').value = ''; document.getElementById('stuPhone').value = '';
         }
 
         function deleteStudent(id) {
-            if(confirm("Remover aluno?")) { db_students = db_students.filter(s => s.id !== id); saveToDB(); renderStudents(); }
+            if(confirm("Remover aluno?")) { db_students = db_students.filter(s => s.id !== id); saveAll(); renderStudents(); }
         }
 
         function renderStudents() {
@@ -271,19 +275,72 @@
             const filtered = db_students.filter(s => s.name.toLowerCase().includes(search));
             if(filtered.length === 0) { listElement.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:40px">Nenhum aluno encontrado</div>`; return; }
             filtered.forEach(s => {
+                listElement.innerHTML += `<div class="student-card"><div class="student-info"><div class="student-avatar">${s.name.charAt(0).toUpperCase()}</div><div class="student-details"><b>${s.name}</b><span>${s.plan} • ${s.phone || 'Sem tel'}</span></div></div><button style="background:none; border:none; color:var(--danger); cursor:pointer" onclick="deleteStudent(${s.id})"><i class="fa-solid fa-trash"></i></button></div>`;
+            });
+        }
+
+        // LÓGICA AGENDA
+        function fillStudentSelect() {
+            const select = document.getElementById('classStudent');
+            select.innerHTML = db_students.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+        }
+
+        function saveClass() {
+            const sid = document.getElementById('classStudent').value;
+            const date = document.getElementById('classDate').value;
+            const time = document.getElementById('classTime').value;
+            if(!sid || !date || !time) return alert("Preencha todos os campos");
+            db_agenda.push({ id: Date.now(), sid, date, time, status: 'pending' });
+            saveAll(); closeModal(); renderAgenda();
+        }
+
+        function togglePresence(id, status) {
+            const cls = db_agenda.find(c => c.id === id);
+            if(cls) { cls.status = status; saveAll(); renderAgenda(); }
+        }
+
+        function renderAgenda() {
+            const date = document.getElementById('agendaDate').value;
+            const listElement = document.getElementById('agendaList');
+            listElement.innerHTML = '';
+            if(!date) { listElement.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:40px">Selecione uma data para ver as aulas</div>`; return; }
+            
+            const filtered = db_agenda.filter(c => c.date === date).sort((a,b) => a.time.localeCompare(b.time));
+            if(filtered.length === 0) { listElement.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:40px">Nenhuma aula agendada para este dia</div>`; return; }
+            
+            filtered.forEach(c => {
+                const stu = db_students.find(s => s.id == c.sid);
                 listElement.innerHTML += `
-                <div class="student-card">
-                    <div class="student-info">
-                        <div class="student-avatar">${s.name.charAt(0).toUpperCase()}</div>
-                        <div class="student-details"><b>${s.name}</b><span>${s.plan} • ${s.phone || 'Sem tel'}</span></div>
+                <div class="class-card">
+                    <div class="class-top">
+                        <span class="class-time">${c.time}</span>
+                        <span class="class-student">${stu ? stu.name : 'Aluno removido'}</span>
                     </div>
-                    <button style="background:none; border:none; color:var(--danger); cursor:pointer" onclick="deleteStudent(${s.id})"><i class="fa-solid fa-trash"></i></button>
+                    <div class="class-actions">
+                        <button class="btn-presence ${c.status=='p'?'p':''}" onclick="togglePresence(${c.id}, 'p')">Presente</button>
+                        <button class="btn-presence ${c.status=='f'?'f':''}" onclick="togglePresence(${c.id}, 'f')">Faltou</button>
+                        <button class="btn-presence" style="color:var(--danger)" onclick="deleteClass(${c.id})">Excluir</button>
+                    </div>
                 </div>`;
             });
         }
 
-        function updateDashboard() { document.getElementById('dash-alunos').innerText = db_students.length; }
-        window.onload = () => { updateDashboard(); };
+        function deleteClass(id) {
+            if(confirm("Excluir aula?")) { db_agenda = db_agenda.filter(c => c.id !== id); saveAll(); renderAgenda(); }
+        }
+
+        function updateDashboard() {
+            const today = new Date().toISOString().split('T')[0];
+            const todayClasses = db_agenda.filter(c => c.date === today).length;
+            document.getElementById('dash-alunos').innerText = db_students.length;
+            document.getElementById('dash-hoje').innerText = todayClasses;
+        }
+
+        window.onload = () => { 
+            document.getElementById('agendaDate').value = new Date().toISOString().split('T')[0];
+            updateDashboard(); 
+        };
     </script>
 </body>
 </html>
+
