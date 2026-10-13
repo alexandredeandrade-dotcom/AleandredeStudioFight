@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Studio Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg: #05070a;            /* Preto Absoluto */
+            --surface: #11141b;       /* Cinza Profundo */
+            --surface-light: #1c212d;  /* Cinza Médio */
+            --accent: #f97316;        /* Laranja Neon */
+            --accent-soft: rgba(249, 115, 22, 0.15);
+            --text-main: #ffffff;
+            --text-muted: #64748b;
+            --border: #2d3446;         /* Borda quase invisível */
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body {
+            margin: 0; padding: 0; background-color: var(--bg);
+            color: var(--text-main); font-family: 'Inter', sans-serif;
+            padding-bottom: 100px;
+        }
+
+        /* --- HEADER PROFISSIONAL --- */
+        .header {
+            padding: 40px 20px 30px;
+            background: linear-gradient(180deg, #1a1f2e 0%, var(--bg) 100%);
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 25px;
+        }
+        .header h1 { 
+            font-size: 26px; font-weight: 800; margin: 0; 
+            background: linear-gradient(90deg, #fff, var(--accent)); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .header p { margin: 5px 0 0; color: var(--text-muted); font-size: 14px; font-weight: 400; }
+
+        /* --- SISTEMA DE TELAS --- */
+        .page { display: none; padding: 20px; animation: slideUp 0.4s ease; }
+        .page.active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- CARDS PREMIUM --- */
+        .dashboard-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 30px; }
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: 24px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card:active { transform: scale(0.96); background: var(--surface-light); }
+        
+        /* Efeito de luz no canto do card */
+        .stat-card::after {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(249,115,22,0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .stat-card i { 
+            font-size: 22px; color: var(--accent); margin-bottom: 15px; 
+            display: block; filter: drop-shadow(0 0 5px var(--accent));
+        }
+        .stat-card .value { font-size: 24px; font-weight: 800; display: block; color: #fff; }
+        .stat-card .label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
+
+        /* --- ATALHOS --- */
+        .shortcut-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .shortcut-card:active { transform: translateX(5px); background: var(--surface-light); }
+        .shortcut-icon { 
+            width: 45px; height: 45px; background: var(--accent-soft); 
+            color: var(--accent); border-radius: 14px; 
+            display: grid; place-items: center; font-size: 20px;
+        }
+        .shortcut-text { font-weight: 600; font-size: 15px; }
+
+        /* --- LISTA DE ALUNOS --- */
+        .search-box { display: flex; gap: 10px; margin-bottom: 20px; }
+        .search-box input {
+            flex: 1; background: var(--surface); border: 1px solid var(--border);
+            padding: 15px; border-radius: 15px; color: #fff; font-size: 14px;
+        }
+        .student-card {
+            background: var(--surface); border: 1px solid var(--border);
+            padding: 15px; border-radius: 20px; margin-bottom: 12px;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .student-info { display: flex; align-items: center; gap: 15px; }
+        .student-avatar { 
+            width: 48px; height: 48px; background: linear-gradient(45deg, var(--accent), #fbbf24); 
+            border-radius: 15px; display: grid; place-items: center; font-weight: 800; color: #fff;
+        }
+        .student-details b { display: block; font-size: 16px; color: #fff; }
+        .student-details span { font-size: 13px; color: var(--text-muted); }
+
+        /* --- MODAL --- */
+        .modal {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center;
+            padding: 20px; z-index: 2000; backdrop-filter: blur(5px);
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: var(--surface); width: 100%; max-width: 400px;
+            padding: 30px; border-radius: 30px; border: 1px solid var(--border);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 8px; font-weight: 600; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 14px; background: var(--bg); border: 1px solid var(--border);
+            border-radius: 12px; color: #fff; font-size: 15px;
+        }
+
+        /* --- NAV --- */
+        nav {
+            position: fixed; bottom: 0; left: 0; right: 0; background: rgba(17, 24, 31, 0.95);
+            border-top: 1px solid var(--border); display: flex; justify-content: space-around;
+            padding: 15px 0 calc(env(safe-area-inset-bottom, 15px));
+            backdrop-filter: blur(10px); z-index: 1000;
+        }
+        .nav-item {
+            display: flex; flex-direction: column; align-items: center;
+            color: var(--text-muted); text-decoration: none; font-size: 11px; font-weight: 600;
+            border: none; background: none; cursor: pointer; width: 25%; transition: var(--transition);
+        }
+        .nav-item i { font-size: 22px; margin-bottom: 6px; transition: var(--transition); }
+        .nav-item.active { color: var(--accent); }
+        .nav-item.active i { transform: translateY(-5px); color: var(--accent); }
+
+        .section-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; color: #fff; }
+        button.pr { background: var(--accent); border: none; color: #fff; font-weight: 700; padding: 15px; border-radius: 15px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1 id="page-title">Dashboard</h1>
+        <p id="page-subtitle">Gestão de Alta Performance</p>
+    </div>
+
+    <div id="home" class="page active">
+        <div class="section-title"><i class="fa-solid fa-chart-line" style="color:var(--accent)"></i> Visão Geral</div>
+        <div class="dashboard-grid">
+            <div class="stat-card"><i class="fa-solid fa-users"></i><span class="value" id="dash-alunos">0</span><span class="label">Ativos</span></div>
+            <div class="stat-card"><i class="fa-solid fa-calendar-check"></i><span class="value" id="dash-hoje">0</span><span class="label">Aulas Hoje</span></div>
+            <div class="stat-card"><i class="fa-solid fa-wallet"></i><span class="value" id="dash-financeiro">R$ 0</span><span class="label">Recebido Mês</span></div>
+            <div class="stat-card"><i class="fa-solid fa-circle-exclamation"></i><span class="value" id="dash-pendente">0</span><span class="label">Pendências</span></div>
+        </div>
+        
+        <div class="section-title"><i class="fa-solid fa-bolt" style="color:var(--accent)"></i> Atalhos Rápidos</div>
+        <div class="shortcut-card" onclick="switchPage('students')">
+            <div class="shortcut-icon"><i class="fa-solid fa-user-plus"></i></div>
+            <div class="shortcut-text">Cadastrar Novo Aluno</div>
+        </div>
+        <div class="shortcut-card" onclick="switchPage('agenda')">
+            <div class="shortcut-icon"><i class="fa-solid fa-calendar-plus"></i></div>
+            <div class="shortcut-text">Agendar Nova Aula</div>
+        </div>
+    </div>
+
+    <div id="students" class="page">
+        <div class="section-title"><i class="fa-solid fa-users" style="color:var(--accent)"></i> Alunos</div>
+        <div class="search-box">
+            <input type="text" id="studentSearch" placeholder="Buscar aluno..." oninput="renderStudents()">
+            <button class="pr" style="padding: 0 20px; border-radius: 15px;" onclick="openModal()"><i class="fa-solid fa-plus"></i></button>
+        </div>
+        <div id="studentsList"></div>
+    </div>
+
+    <div id="agenda" class="page"><div class="section-title">Agenda</div><div class="placeholder-card">Em construção...</div></div>
+    <div id="finance" class="page"><div class="section-title">Financeiro</div><div class="placeholder-card">Em construção...</div></div>
+
+    <div id="studentModal" class="modal">
+        <div class="modal-content">
+            <h2 style="margin-top:0; font-weight:800">Novo Aluno</h2>
+            <div class="form-group">
+                <label>Nome Completo</label>
+                <input type="text" id="stuName" placeholder="Ex: João Silva">
+            </div>
+            <div class="form-group">
+                <label>WhatsApp</label>
+                <input type="tel" id="stuPhone" placeholder="(00) 00000-0000">
+            </div>
+            <div class="form-group">
+                <label>Plano</label>
+                <select id="stuPlan">
+                    <option value="Mensal">Mensal</option>
+                    <option value="Trimestral">Trimestral</option>
+                    <option value="Semestral">Semestral</option>
+                    <option value="Avulso">Avulso</option>
+                </select>
+            </div>
+            <div style="display:flex; gap:10px; margin-top:25px">
+                <button style="flex:1; padding:15px; border-radius:15px; background:transparent; color:#fff; border:1px solid var(--border); cursor:pointer" onclick="closeModal()">Cancelar</button>
+                <button class="pr" style="flex:2; padding:15px; border-radius:15px; cursor:pointer" onclick="saveStudent()">Confirmar Cadastro</button>
+            </div>
+        </div>
+    </div>
+
+    <nav>
+        <button class="nav-item active" onclick="switchPage('home', this)"><i class="fa-solid fa-house"></i><span>Início</span></button>
+        <button class="nav-item" onclick="switchPage('students', this)"><i class="fa-solid fa-user-group"></i><span>Alunos</span></button>
+        <button class="nav-item" onclick="switchPage('agenda', this)"><i class="fa-solid fa-calendar-days"></i><span>Agenda</span></button>
+        <button class="nav-item" onclick="switchPage('finance', this)"><i class="fa-solid fa-coins"></i><span>Financeiro</span></button>
+    </nav>
+
+    <script>
+        let db_students = JSON.parse(localStorage.getItem('studio_students')) || [];
+        function saveToDB() { localStorage.setItem('studio_students', JSON.stringify(db_students)); updateDashboard(); }
+
+        function switchPage(pageId, element) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            if(element) {
+                document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+                element.classList.add('active');
+            }
+            const titles = { 'home': ['Dashboard', 'Gestão de Alta Performance'], 'students': ['Alunos', 'Gestão de matriculados'], 'agenda': ['Agenda', 'Controle de horários'], 'finance': ['Financeiro', 'Fluxo de caixa'] };
+            document.getElementById('page-title').innerText = titles[pageId][0];
+            document.getElementById('page-subtitle').innerText = titles[pageId][1];
+            if(pageId === 'students') renderStudents();
+        }
+
+        function openModal() { document.getElementById('studentModal').classList.add('active'); }
+        function closeModal() { document.getElementById('studentModal').classList.remove('active'); }
+
+        function saveStudent() {
+            const name = document.getElementById('stuName').value;
+            const phone = document.getElementById('stuPhone').value;
+            const plan = document.getElementById('stuPlan').value;
+            if(!name) return alert("Digite o nome");
+            db_students.push({ id: Date.now(), name, phone, plan });
+            saveToDB(); closeModal(); renderStudents();
+            document.getElementById('stuName').value = ''; document.getElementById('stuPhone').value = '';
+        }
+
+        function deleteStudent(id) {
+            if(confirm("Remover aluno?")) { db_students = db_students.filter(s => s.id !== id); saveToDB(); renderStudents(); }
+        }
+
+        function renderStudents() {
+            const search = document.getElementById('studentSearch').value.toLowerCase();
+            const listElement = document.getElementById('studentsList');
+            listElement.innerHTML = '';
+            const filtered = db_students.filter(s => s.name.toLowerCase().includes(search));
+            if(filtered.length === 0) { listElement.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding:40px">Nenhum aluno encontrado</div>`; return; }
+            filtered.forEach(s => {
+                listElement.innerHTML += `
+                <div class="student-card">
+                    <div class="student-info">
+                        <div class="student-avatar">${s.name.charAt(0).toUpperCase()}</div>
+                        <div class="student-details"><b>${s.name}</b><span>${s.plan} • ${s.phone || 'Sem tel'}</span></div>
+                    </div>
+                    <button style="background:none; border:none; color:var(--danger); cursor:pointer" onclick="deleteStudent(${s.id})"><i class="fa-solid fa-trash"></i></button>
+                </div>`;
+            });
+        }
+
+        function updateDashboard() { document.getElementById('dash-alunos').innerText = db_students.length; }
+        window.onload = () => { updateDashboard(); };
+    </script>
+</body>
+</html>
